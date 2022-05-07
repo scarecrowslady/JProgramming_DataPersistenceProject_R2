@@ -3,7 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - player
+  - bullet
+  - allienBullet
+  - playerKiller
+  - resources
+  - aggAlien
+  - res_rocks
+  - res_debris
+  - res_alien
   layers:
   - Default
   - TransparentFX
