@@ -11,17 +11,21 @@ using UnityEditor;
 
 public class MainMenuController : MonoBehaviour
 {
-    public TMP_Text previousHighScore;
-
     public bool colorSelected;
     public bool difficultySelected;
+    public bool playerNameSelected;
+
+    public string playerName;
+    public Color playerColor;
+    public float playerHealth;
+
+    GameController gameController;
 
     private void Start()
     {
         colorSelected = false;
         difficultySelected = false;
-
-        previousHighScore.text = "HiScore: " + StateGameController.HiScore + "";
+        playerNameSelected = false;
     }
 
     private void Update()
@@ -29,73 +33,54 @@ public class MainMenuController : MonoBehaviour
 
     }
 
-    public void SetColor(Vector4 playerColor)
+    public void SetColor(Color playerColor)
     {
         Debug.Log("color is: " + playerColor);
 
-        StateGameController.PlayerColor = playerColor;
+        MainManager.Instance.PlayerColor = playerColor;
 
         colorSelected = true;
     }
 
     public void SetDifficulty(string input)
     {
-        StateGameController.difficulty = input;
+        MainManager.Instance.DifficultyLevel = input;
 
         difficultySelected = true;
     }
 
+    public void SetPlayerName(string input)
+    {
+        MainManager.Instance.PlayerName = input;
+
+        playerNameSelected = true;
+    }
+
+    public void SetPlayerHiScore(float input)
+    {
+        MainManager.Instance.PlayerHiScore = input;
+    }
+
     public void StartGame()
     {
-        if (colorSelected == true && difficultySelected == true)
+        if (colorSelected == true && difficultySelected == true && playerNameSelected == true)
         {
-            StateGameController.HiScore = 0;
-            StateGameController.MoneySaved = 0;
-            StateGameController.AlienRlshpScore = 0;
-            StateGameController.InventoryRockCount = 0;
-            StateGameController.InventoryDebrisCount = 0;
-            StateGameController.InventoryBountyCount = 0;
+            MainManager.Instance.PlayerHealth = 30;
+
+            MainManager.Instance.PlayerHiScore = 0;
+
+            MainManager.Instance.MoneySaved = 0;
+            MainManager.Instance.RlshpScore = 0;
+            MainManager.Instance.InvRockCount = 0;
+            MainManager.Instance.InvDebrisCount = 0;
+            MainManager.Instance.InvBountyCount = 0;
 
             SceneManager.LoadScene("Game");
         }
-
     }
 
     public void LoadGame()
     {
-        PlayerData data = SaveSystem.LoadPlayer();
-
-        Color playerColor;
-        playerColor.r = data.playerColor[0];
-        playerColor.g = data.playerColor[1];
-        playerColor.b = data.playerColor[2];
-        playerColor.a = data.playerColor[3];
-        StateGameController.PlayerColor = playerColor;
-
-        float hiScore;
-        hiScore = data.hiScore;
-        StateGameController.HiScore = hiScore;
-
-        float moneySaved;
-        moneySaved = data.moneySaved;
-        StateGameController.MoneySaved = moneySaved;
-
-        float alienRlshpScore;
-        alienRlshpScore = data.alienRlshpScore;
-        StateGameController.AlienRlshpScore = alienRlshpScore;
-
-        float inventoryRockCount;
-        inventoryRockCount = data.inventoryRockCount;
-        StateGameController.InventoryRockCount = inventoryRockCount;
-
-        float inventoryDebrisCount;
-        inventoryDebrisCount = data.inventoryDebrisCount;
-        StateGameController.InventoryDebrisCount = inventoryDebrisCount;
-
-        float inventoryBountyCount;
-        inventoryBountyCount = data.inventoryBountyCount;
-        StateGameController.InventoryBountyCount = inventoryBountyCount;
-
         SceneManager.LoadScene("Game");
     }
 

@@ -19,11 +19,17 @@ public class PlayerController : MonoBehaviour
 
     //triggering game states
     GameController gameManagingScript;
+    public GameObject gameManager;
+
+    //game UI stuff
+    public GameObject mainGameUIPanel;
+    public GameObject pauseGamePanel;
 
     // Start is called before the first frame update
     void Start()
     {
-        playerCol = playerPFB.GetComponent<SpriteRenderer>();                
+        playerCol = playerPFB.GetComponent<SpriteRenderer>();
+        gameManagingScript = gameManager.GetComponent<GameController>();
     }
 
     // Update is called once per frame
@@ -47,22 +53,38 @@ public class PlayerController : MonoBehaviour
 
         horizontalInput = Input.GetAxis("Horizontal");
         transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * playerMoveSpeed);
+
+        Debug.Log("Player Health: " + MainManager.Instance.PlayerHealth + "");
     }
 
     public void SetPlayerColor()
     {
-        playerBodyCol = StateGameController.PlayerColor;
-        playerCol.color = playerBodyCol;
+        if (MainManager.Instance != null)
+        {
+            playerBodyCol = MainManager.Instance.PlayerColor;
+            playerCol.color = playerBodyCol;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.CompareTag("playerKiller") == true)
         {
-            Destroy(other);
-            Destroy(this.gameObject);
+            gameManagingScript.GetComponent<GameController>().ManagePlayerHealth(-30);
+        }
 
-            gameManagingScript.GameOverScreen();
+        if (other.CompareTag("res_rocks") || other.CompareTag("res_debris") || other.CompareTag("allienBullet") == true)
+        {
+            Debug.Log("I hit a resource");
+
+            gameManagingScript.GetComponent<GameController>().ManagePlayerHealth(-2);
+        }
+
+        if (other.CompareTag("res_alien") || other.CompareTag("aggAlien") == true)
+        {
+            Debug.Log("I hit an alien");
+
+            gameManagingScript.GetComponent<GameController>().ManagePlayerHealth(-4);
         }
     }
 }

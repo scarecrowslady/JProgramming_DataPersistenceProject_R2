@@ -7,8 +7,11 @@ using TMPro;
 
 public class GameController : MonoBehaviour
 {
-    public TMP_Text difficultyText;
-
+    // game UI text
+    [SerializeField]
+    private TMP_Text difficultyText;
+    [SerializeField]
+    private TMP_Text playerHealthText;    
     [SerializeField]
     private TMP_Text scoreText;
     [SerializeField]
@@ -22,108 +25,136 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private TMP_Text showBounty;
 
+    //player info
     public PlayerController player;
+    public GameObject playerRB;
 
-    //game UI stuff
+    //game ui panel
     public GameObject mainGameUIPanel;
     public GameObject pauseGamePanel;
 
+    //player health
+    public float playerHealth;
+
+    //player name
+    [SerializeField]
+    private TMP_Text playerName;
+    public float playerHiScore;
+
+    //player hiscore
+    [SerializeField]
+    private TMP_Text gameReturnHiScore;
+
     private void Start()
-    {
+    {       
+        difficultyText.text = MainManager.Instance.DifficultyLevel;
+
+        playerName.text = MainManager.Instance.PlayerName;
+        playerHealthText.text = "Shields: " + MainManager.Instance.PlayerHealth + "";
+
+        scoreText.text = "HiScore: " + MainManager.Instance.PlayerHiScore + "";
+
+        showMoney.text = "Money: " + MainManager.Instance.MoneySaved + "";
+        showRlshp.text = "Alien Relationship: " + MainManager.Instance.RlshpScore + "";
+        showRocks.text = "Rocks: " + MainManager.Instance.InvRockCount + "";
+        showDebris.text = "Debris: " + MainManager.Instance.InvDebrisCount + "";
+        showBounty.text = "Bounty: " + MainManager.Instance.InvBountyCount + "";
+
         mainGameUIPanel.SetActive(true);
         pauseGamePanel.SetActive(false);
 
-        difficultyText.text = StateGameController.difficulty;
-
-        scoreText.text = "HiScore: " + StateGameController.HiScore + "";
-        showMoney.text = "Money: " + StateGameController.MoneySaved + "";
-        showRlshp.text = "Alien Relationship: " + StateGameController.AlienRlshpScore + "";
-        showRocks.text = "Rocks: " + StateGameController.InventoryRockCount + "";
-        showDebris.text = "Debris: " + StateGameController.InventoryDebrisCount + "";
-        showBounty.text = "Bounty: " + StateGameController.InventoryBountyCount + "";
-
         Time.timeScale = 1;
+
+        MainManager.Instance.IsGameSaved = false;
     }
 
     private void Update()
     {
-
+        if(MainManager.Instance.PlayerHealth <= 0)
+        {
+            GameOverScreen();
+        }
     }
 
     public void GoBack()
     {
         Time.timeScale = 0;
 
+        gameReturnHiScore.text = "HiScore: " + MainManager.Instance.PlayerHiScore + "";
+
         SaveGame();
         SceneManager.LoadScene("Main");
     }
 
-    public void AddingScore(int amount)
+    public void AddingScore(float amount)
     {
-        StateGameController.HiScore += amount;
+        MainManager.Instance.PlayerHiScore += amount;
 
-        Debug.Log("Adding Score");
-
-        scoreText.text = "HiScore: " + StateGameController.HiScore + "";
+        scoreText.text = "HiScore: " + MainManager.Instance.PlayerHiScore + "";
     }
 
-    public void AddMoney(int amount)
+    public void AddMoney(float amount)
     {
-        StateGameController.MoneySaved += amount;
+        MainManager.Instance.MoneySaved += amount;
 
-        Debug.Log("Adding Money");
-
-        showMoney.text = "Money: " + StateGameController.MoneySaved + "";
+        showMoney.text = "Money: " + MainManager.Instance.MoneySaved + "";
     }
 
-    public void AddRlshp(int amount)
+    public void AddRlshp(float amount)
     {
-        StateGameController.AlienRlshpScore += amount;
+        MainManager.Instance.RlshpScore += amount;
 
-        Debug.Log("Adding Relationship");
-
-        showRlshp.text = "Relationship: " + StateGameController.AlienRlshpScore + "";
+        showRlshp.text = "Relationship: " + MainManager.Instance.RlshpScore + "";
     }
 
-    public void MinusRlshp(int amount)
+    public void MinusRlshp(float amount)
     {
-        StateGameController.AlienRlshpScore -= amount;
+        MainManager.Instance.RlshpScore -= amount;
 
-        showRlshp.text = "Relationship: " + StateGameController.AlienRlshpScore + "";
+        showRlshp.text = "Relationship: " + MainManager.Instance.RlshpScore + "";
     }
 
-    public void AddRocks(int amount)
+    public void AddRocks(float amount)
     {
-        StateGameController.InventoryRockCount += amount;
+        MainManager.Instance.InvRockCount += amount;
 
-        showRocks.text = "Rocks: " + StateGameController.InventoryRockCount + "";
+        showRocks.text = "Rocks: " + MainManager.Instance.InvRockCount + "";
     }
 
-    public void AddDebris(int amount)
+    public void AddDebris(float amount)
     {
-        StateGameController.InventoryDebrisCount += amount;
+        MainManager.Instance.InvDebrisCount += amount;
 
-        showDebris.text = "Debris: " + StateGameController.InventoryDebrisCount + "";
+        showDebris.text = "Debris: " + MainManager.Instance.InvDebrisCount + "";
     }
 
-    public void AddBounty(int amount)
+    public void AddBounty(float amount)
     {
-        StateGameController.InventoryBountyCount += amount;
+        MainManager.Instance.InvBountyCount += amount;
 
-        showBounty.text = "Bounty: " + StateGameController.InventoryBountyCount + "";
+        showBounty.text = "Bounty: " + MainManager.Instance.InvBountyCount + "";
+    }
+    
+    public void ManagePlayerHealth(float amount)
+    {
+        MainManager.Instance.PlayerHealth += amount;
+
+        playerHealthText.text = "Shields: " + MainManager.Instance.PlayerHealth + "";
     }
 
     public void SaveGame()
     {
-        Debug.Log("Saved");
-        SaveSystem.SavePlayer(player);
+        //Debug.Log("Saved");
+
+        MainManager.Instance.IsGameSaved = true;
+        MainManager.Instance.SaveInfo();
     }
 
     public void GameOverScreen()
     {
+        Time.timeScale = 0;
+
         mainGameUIPanel.SetActive(false);
         pauseGamePanel.SetActive(true);
-
-        Time.timeScale = 0;
     }
 }
