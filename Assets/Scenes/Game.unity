@@ -545,7 +545,7 @@ GameObject:
   - component: {fileID: 465385233}
   - component: {fileID: 465385232}
   m_Layer: 5
-  m_Name: text_hiScore
+  m_Name: text_gameOverScore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -568,8 +568,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 26.0051, y: -64}
-  m_SizeDelta: {x: 880.5262, y: 50}
+  m_AnchoredPosition: {x: 26.0051, y: -44.5}
+  m_SizeDelta: {x: 880.5262, y: 89}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &465385232
 MonoBehaviour:
@@ -1507,9 +1507,6 @@ MonoBehaviour:
   playerName: {fileID: 838843634}
   playerHiScore: 0
   gameReturnHiScore: {fileID: 465385232}
-  oldPlayerNameOne: 
-  oldHiScoreOne: 0
-  isGameOver: 0
 --- !u!1 &918395598
 GameObject:
   m_ObjectHideFlags: 0
@@ -1528,7 +1525,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &918395599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2848,7 +2845,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 851743429}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: GoBack
+        m_MethodName: EndedGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

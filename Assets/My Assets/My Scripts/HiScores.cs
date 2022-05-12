@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class HiScores : MonoBehaviour
@@ -19,7 +20,7 @@ public class HiScores : MonoBehaviour
         UpdateDisplay();
     }
 
-    void UpdateDisplay()
+    public void UpdateDisplay()
     {
         scores.Sort((MainManager x, MainManager y) => y.PlayerHiScore.CompareTo(x.PlayerHiScore));
 
@@ -37,8 +38,13 @@ public class HiScores : MonoBehaviour
         } 
     }
 
-    void AddNewScore(string currentPlayerName, float currentHiScore)
+    public void AddNewScore(string currentPlayerName, float currentHiScore)
     {
-        scores.Add(new MainManager { PlayerName = currentPlayerName, PlayerHiScore = currentHiScore });
+        scores.Add(item: new MainManager { PlayerName = currentPlayerName, PlayerHiScore = currentHiScore });
+    }
+
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("Main");
     }
 }

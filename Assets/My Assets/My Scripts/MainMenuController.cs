@@ -19,6 +19,8 @@ public class MainMenuController : MonoBehaviour
     public Color playerColor;
     public float playerHealth;
 
+    public GameObject errorCanvas;
+
     GameController gameController;
 
     private void Start()
@@ -56,11 +58,6 @@ public class MainMenuController : MonoBehaviour
         playerNameSelected = true;
     }
 
-    public void SetPlayerHiScore(float input)
-    {
-        MainManager.Instance.PlayerHiScore = input;
-    }
-
     public void StartGame()
     {
         if (colorSelected == true && difficultySelected == true && playerNameSelected == true)
@@ -77,11 +74,35 @@ public class MainMenuController : MonoBehaviour
 
             SceneManager.LoadScene("Game");
         }
+        else
+        {
+            errorCanvas.gameObject.SetActive(true);
+
+            //add a small error screen for players
+            Debug.Log("you're missing something");
+        }
+    }
+
+    public void TriggerLoadedGame()
+    {
+        if(MainManager.Instance.IsGameSaved == false)
+        {
+            Debug.Log("there is no saved game");
+        }
+        else
+        {
+            LoadGame(); 
+        }
     }
 
     public void LoadGame()
     {
         SceneManager.LoadScene("Game");
+    }
+
+    public void LoadHiScores()
+    {
+        SceneManager.LoadScene("HiScores");
     }
 
     public void Exit()

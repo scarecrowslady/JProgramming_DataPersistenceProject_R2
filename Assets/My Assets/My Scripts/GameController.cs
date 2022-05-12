@@ -76,14 +76,22 @@ public class GameController : MonoBehaviour
         }
     }
 
+    //with a game in progress
     public void GoBack()
     {
         Time.timeScale = 0;
 
-        gameReturnHiScore.text = "HiScore: " + MainManager.Instance.PlayerHiScore + "";
-
         SaveGame();
         SceneManager.LoadScene("Main");
+    }
+
+    //with a game ended
+    public void EndedGame()
+    {
+        Time.timeScale = 0;
+
+        SceneManager.LoadScene("Main");
+        MainManager.Instance.IsGameSaved = false;
     }
 
     public void AddingScore(float amount)
@@ -144,15 +152,18 @@ public class GameController : MonoBehaviour
 
     public void SaveGame()
     {
-        //Debug.Log("Saved");
-
         MainManager.Instance.IsGameSaved = true;
+
         MainManager.Instance.SaveInfo();
     }
 
     public void GameOverScreen()
     {
         Time.timeScale = 0;
+
+        gameReturnHiScore.text = "HiScore: " + MainManager.Instance.PlayerHiScore + "";
+
+        Debug.Log(gameReturnHiScore.text);
 
         mainGameUIPanel.SetActive(false);
         pauseGamePanel.SetActive(true);
