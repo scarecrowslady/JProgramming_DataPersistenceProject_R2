@@ -7,6 +7,7 @@ using TMPro;
 
 public class GameController : MonoBehaviour
 {
+    #region initializing stuff
     // game UI text
     [SerializeField]
     private TMP_Text difficultyText;
@@ -45,6 +46,14 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private TMP_Text gameReturnHiScore;
 
+    //for hiscores
+    public string lastPlayerName;
+    public float lastPlayerScore;
+
+    HighscoreTable highscoreTable;
+
+    #endregion
+
     private void Start()
     {       
         difficultyText.text = MainManager.Instance.DifficultyLevel;
@@ -66,13 +75,28 @@ public class GameController : MonoBehaviour
         Time.timeScale = 1;
 
         MainManager.Instance.IsGameSaved = false;
+        MainManager.Instance.IsGameEnded = false;
     }
 
     private void Update()
     {
         if(MainManager.Instance.PlayerHealth <= 0)
-        {
+        {         
+            MainManager.Instance.IsGameEnded = true;
+
+            MainManager.Instance.lastPlayerName = MainManager.Instance.PlayerName;
+            MainManager.Instance.lastPlayerScore = MainManager.Instance.PlayerHiScore;
+
+            Debug.Log(MainManager.Instance.lastPlayerName + " " + MainManager.Instance.lastPlayerScore);
+
+            MainManager.Instance.SaveInfo();
+
             GameOverScreen();
+
+            lastPlayerName = MainManager.Instance.lastPlayerName;
+            lastPlayerScore = MainManager.Instance.lastPlayerScore;
+
+            highscoreTable.AddHighscoreEntry(lastPlayerScore, lastPlayerName);
         }
     }
 
@@ -88,11 +112,11 @@ public class GameController : MonoBehaviour
     //with a game ended
     public void EndedGame()
     {
-        Time.timeScale = 0;
+        Time.timeScale = 0;             
 
         SceneManager.LoadScene("Main");
         MainManager.Instance.IsGameSaved = false;
-    }
+    }  
 
     public void AddingScore(float amount)
     {
@@ -162,8 +186,6 @@ public class GameController : MonoBehaviour
         Time.timeScale = 0;
 
         gameReturnHiScore.text = "HiScore: " + MainManager.Instance.PlayerHiScore + "";
-
-        Debug.Log(gameReturnHiScore.text);
 
         mainGameUIPanel.SetActive(false);
         pauseGamePanel.SetActive(true);

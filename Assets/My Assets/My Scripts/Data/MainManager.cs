@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 
 public class MainManager : MonoBehaviour
@@ -10,6 +11,8 @@ public class MainManager : MonoBehaviour
 
     #region "data enclosed"
     public bool IsGameSaved;
+    public bool IsGameEnded;
+    public bool isHighScoreTriggered;
     public string DifficultyLevel;
 
     public string PlayerName;
@@ -24,17 +27,21 @@ public class MainManager : MonoBehaviour
     public float InvDebrisCount;
     public float InvBountyCount;
 
+    public string lastPlayerName;
+    public float lastPlayerScore;
+
     #endregion
 
     private void Awake()
     {
-        if(Instance != null)
-        { 
+        if (Instance != null)
+        {
             Destroy(gameObject);
             return;
         }
 
         Instance = this;
+
         DontDestroyOnLoad(gameObject);
 
         LoadInfo();
@@ -44,6 +51,8 @@ public class MainManager : MonoBehaviour
     class SaveData
     {
         public bool IsGameSaved;
+        public bool IsGameEnded;
+        public bool isHighScoreTriggered;
         public string DifficultyLevel;
 
         public string PlayerName;
@@ -57,6 +66,9 @@ public class MainManager : MonoBehaviour
         public float InvRockCount;
         public float InvDebrisCount;
         public float InvBountyCount;
+
+        public string LastPlayerName;
+        public float LastPlayerScore;
     }
 
     public void SaveInfo()
@@ -64,6 +76,7 @@ public class MainManager : MonoBehaviour
         SaveData data = new SaveData();
 
         data.IsGameSaved = IsGameSaved;
+        data.isHighScoreTriggered = isHighScoreTriggered;
         data.DifficultyLevel = DifficultyLevel;
 
         data.PlayerName = PlayerName;
@@ -77,6 +90,9 @@ public class MainManager : MonoBehaviour
         data.InvRockCount = InvRockCount;
         data.InvDebrisCount = InvDebrisCount;
         data.InvBountyCount = InvBountyCount;
+
+        data.LastPlayerName = lastPlayerName;
+        data.LastPlayerScore = lastPlayerScore;
 
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
@@ -92,6 +108,7 @@ public class MainManager : MonoBehaviour
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
             IsGameSaved = data.IsGameSaved;
+            isHighScoreTriggered = data.isHighScoreTriggered;
             DifficultyLevel = data.DifficultyLevel;
 
             PlayerName = data.PlayerName;
@@ -105,6 +122,9 @@ public class MainManager : MonoBehaviour
             InvRockCount = data.InvRockCount;
             InvDebrisCount = data.InvDebrisCount;
             InvBountyCount = data.InvBountyCount;
+
+            lastPlayerName = data.LastPlayerName;
+            lastPlayerScore = data.LastPlayerScore;
         }
         else
         {

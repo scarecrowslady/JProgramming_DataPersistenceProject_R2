@@ -21,24 +21,22 @@ public class MainMenuController : MonoBehaviour
 
     public GameObject errorCanvas;
 
-    GameController gameController;
+    public TMP_Text lastPlayerName;
+    public TMP_Text lastPlayerScore;
+    public string lastPlayerNameVar;
+    public float lastPlayerScoreVar;
 
     private void Start()
     {
         colorSelected = false;
         difficultySelected = false;
         playerNameSelected = false;
-    }
 
-    private void Update()
-    {
-
+        SetCurrentBestPlayer();
     }
 
     public void SetColor(Color playerColor)
     {
-        Debug.Log("color is: " + playerColor);
-
         MainManager.Instance.PlayerColor = playerColor;
 
         colorSelected = true;
@@ -56,6 +54,22 @@ public class MainMenuController : MonoBehaviour
         MainManager.Instance.PlayerName = input;
 
         playerNameSelected = true;
+    }
+
+    public void ClearHiScores()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
+    public void SetCurrentBestPlayer()
+    {    
+        lastPlayerNameVar = MainManager.Instance.lastPlayerName;
+        lastPlayerScoreVar = MainManager.Instance.lastPlayerScore;
+
+        lastPlayerName.text = "Last Player: " + lastPlayerNameVar;       
+        lastPlayerScore.text = "Highscore: " + lastPlayerScoreVar + "";
+
+        MainManager.Instance.SaveInfo();
     }
 
     public void StartGame()
@@ -95,14 +109,14 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
+    public void GoToHighScores()
+    {
+        SceneManager.LoadScene("HiScores");
+    }
+
     public void LoadGame()
     {
         SceneManager.LoadScene("Game");
-    }
-
-    public void LoadHiScores()
-    {
-        SceneManager.LoadScene("HiScores");
     }
 
     public void Exit()
