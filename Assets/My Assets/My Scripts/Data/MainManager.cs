@@ -29,6 +29,14 @@ public class MainManager : MonoBehaviour
 
     public string lastPlayerName;
     public float lastPlayerScore;
+    public string bestPlayerName;
+    public float bestPlayerScore;
+
+    public string levelName;
+    public float levelNumber;
+    public bool isLevelEnded;
+
+    public int timeTaken;
 
     #endregion
 
@@ -69,6 +77,14 @@ public class MainManager : MonoBehaviour
 
         public string LastPlayerName;
         public float LastPlayerScore;
+        public string BestPlayerName;
+        public float BestPlayerScore;
+
+        public string LevelName;
+        public float LevelNumber;
+        public bool IsLevelEnded;
+
+        public int TimeTaken;
     }
 
     public void SaveInfo()
@@ -93,6 +109,14 @@ public class MainManager : MonoBehaviour
 
         data.LastPlayerName = lastPlayerName;
         data.LastPlayerScore = lastPlayerScore;
+        data.BestPlayerName = bestPlayerName;
+        data.BestPlayerScore = bestPlayerScore;
+
+        data.LevelName = levelName;
+        data.LevelNumber = levelNumber;
+        data.IsLevelEnded = isLevelEnded;
+
+        data.TimeTaken = timeTaken;
 
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
@@ -125,6 +149,14 @@ public class MainManager : MonoBehaviour
 
             lastPlayerName = data.LastPlayerName;
             lastPlayerScore = data.LastPlayerScore;
+            bestPlayerName = data.BestPlayerName;
+            bestPlayerScore = data.BestPlayerScore;
+
+            levelName = data.LevelName;
+            levelNumber = data.LevelNumber;
+            isLevelEnded = data.IsLevelEnded;
+
+            timeTaken = data.TimeTaken;
         }
         else
         {

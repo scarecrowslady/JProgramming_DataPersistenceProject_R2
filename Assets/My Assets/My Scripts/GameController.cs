@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private TMP_Text difficultyText;
     [SerializeField]
-    private TMP_Text playerHealthText;    
+    private TMP_Text playerHealthText;
     [SerializeField]
     private TMP_Text scoreText;
     [SerializeField]
@@ -29,6 +29,10 @@ public class GameController : MonoBehaviour
     //player info
     public PlayerController player;
     public GameObject playerRB;
+    public float playerSpeed;
+    public Vector3 playerStarterPOS;
+    private Vector3 playerCurrentPOS;
+    private Vector3 playerNewPOS;
 
     //game ui panel
     public GameObject mainGameUIPanel;
@@ -49,26 +53,48 @@ public class GameController : MonoBehaviour
     //for hiscores
     public string lastPlayerName;
     public float lastPlayerScore;
+    public string bestPlayerName;
+    public float bestPlayerScore;
 
-    HighscoreTable highscoreTable;
+    //levels
+    public TMP_Text levelDisplay;
+    public string levelName;
+    public float levelNumber;
+    public bool isLevelEnded;
+
+    //level time limit
+    public TMP_Text timeCountdown;
+    public int secondsLeft = 60;
+    public bool isReset = false;
+
+    //citadel
+    public GameObject citadelPFB;
+    public GameObject citadelSpawnZone;
+    private Vector3 citadelParkingArea;
 
     #endregion
 
     private void Start()
-    {       
-        difficultyText.text = MainManager.Instance.DifficultyLevel;
+    {
+        //initializing player
+        playerRB.gameObject.SetActive(true);
 
+        //initialize opening display
+        difficultyText.text = MainManager.Instance.DifficultyLevel;
         playerName.text = MainManager.Instance.PlayerName;
         playerHealthText.text = "Shields: " + MainManager.Instance.PlayerHealth + "";
-
         scoreText.text = "HiScore: " + MainManager.Instance.PlayerHiScore + "";
-
         showMoney.text = "Money: " + MainManager.Instance.MoneySaved + "";
         showRlshp.text = "Alien Relationship: " + MainManager.Instance.RlshpScore + "";
         showRocks.text = "Rocks: " + MainManager.Instance.InvRockCount + "";
         showDebris.text = "Debris: " + MainManager.Instance.InvDebrisCount + "";
-        showBounty.text = "Bounty: " + MainManager.Instance.InvBountyCount + "";
+        showBounty.text = "Bounty: " + MainManager.Instance.InvBountyCount + "";    
+        timeCountdown.text = "00:" + MainManager.Instance.timeTaken;
 
+        //------------------fix this: changing level number to an instance data that is saved and returned when reloading
+        levelDisplay.text = "Level " + levelNumber + "" + ":" + levelName;
+
+        //controlling game states
         mainGameUIPanel.SetActive(true);
         pauseGamePanel.SetActive(false);
 
@@ -76,27 +102,49 @@ public class GameController : MonoBehaviour
 
         MainManager.Instance.IsGameSaved = false;
         MainManager.Instance.IsGameEnded = false;
+        MainManager.Instance.isLevelEnded = false;
+
+        //player starting position
+        playerStarterPOS = playerRB.transform.position;
+
+        //registering time
+        secondsLeft = MainManager.Instance.timeTaken;
+
+        //entering citadel animation
+        playerStarterPOS = playerRB.transform.position;
+        citadelParkingArea = citadelPFB.transform.position;
+
+        isLevelEnded = false;
     }
 
     private void Update()
     {
-        if(MainManager.Instance.PlayerHealth <= 0)
-        {         
+        if (MainManager.Instance.PlayerHealth <= 0)
+        {
             MainManager.Instance.IsGameEnded = true;
 
             MainManager.Instance.lastPlayerName = MainManager.Instance.PlayerName;
             MainManager.Instance.lastPlayerScore = MainManager.Instance.PlayerHiScore;
 
-            Debug.Log(MainManager.Instance.lastPlayerName + " " + MainManager.Instance.lastPlayerScore);
+            if (MainManager.Instance.PlayerHiScore > MainManager.Instance.bestPlayerScore)
+            {
+                MainManager.Instance.bestPlayerScore = MainManager.Instance.PlayerHiScore;
+                MainManager.Instance.bestPlayerName = MainManager.Instance.PlayerName;
+            }
 
             MainManager.Instance.SaveInfo();
 
             GameOverScreen();
+        }
 
-            lastPlayerName = MainManager.Instance.lastPlayerName;
-            lastPlayerScore = MainManager.Instance.lastPlayerScore;
+        if (isReset == false && secondsLeft > 0)
+        {
+            StartCoroutine(TimerTake());
+        }
 
-            highscoreTable.AddHighscoreEntry(lastPlayerScore, lastPlayerName);
+        if (secondsLeft <= 0)
+        {
+            LevelEnded();
         }
     }
 
@@ -112,11 +160,11 @@ public class GameController : MonoBehaviour
     //with a game ended
     public void EndedGame()
     {
-        Time.timeScale = 0;             
+        Time.timeScale = 0;
 
         SceneManager.LoadScene("Main");
         MainManager.Instance.IsGameSaved = false;
-    }  
+    }
 
     public void AddingScore(float amount)
     {
@@ -166,12 +214,78 @@ public class GameController : MonoBehaviour
 
         showBounty.text = "Bounty: " + MainManager.Instance.InvBountyCount + "";
     }
-    
+
     public void ManagePlayerHealth(float amount)
     {
         MainManager.Instance.PlayerHealth += amount;
 
         playerHealthText.text = "Shields: " + MainManager.Instance.PlayerHealth + "";
+    } 
+
+    //managing timer
+    IEnumerator TimerTake()
+    {
+        isReset = true;
+        yield return new WaitForSeconds(1);
+        secondsLeft -= 1;
+
+        if (secondsLeft < 10)
+        {
+            timeCountdown.text = "00:0" + secondsLeft;
+        }
+        else
+        {
+            timeCountdown.text = "00:" + secondsLeft;
+        }
+
+        MainManager.Instance.timeTaken = secondsLeft;
+
+        isReset = false;
+    }
+
+    //managing level
+    public void LevelEnded()
+    {
+        isLevelEnded = true;
+        MainManager.Instance.isLevelEnded = true;
+
+        Instantiate(citadelPFB);
+
+        //enter citadel
+        StartCoroutine(LevelEnding());
+
+        Time.timeScale = 0;
+        SaveGame();
+        LoadCitadel();
+    }
+
+    IEnumerator LevelEnding()
+    {
+        isLevelEnded = true;
+        MainManager.Instance.isLevelEnded = true;
+        yield return new WaitForSeconds(1);
+
+        playerCurrentPOS = playerRB.transform.position;
+        playerSpeed = 4.0f;
+        float step = playerSpeed * Time.deltaTime;
+        playerRB.transform.position = Vector3.MoveTowards(playerCurrentPOS, playerStarterPOS, step);
+        yield return new WaitForSeconds(1);
+
+        playerNewPOS = playerRB.transform.position;
+        playerSpeed = 4.0f;
+        float stepNew = playerSpeed * Time.deltaTime;
+        playerRB.transform.position += transform.up * stepNew;
+        Debug.Log(playerRB.transform.position);
+        yield return new WaitForSeconds(2);
+
+        playerRB.gameObject.SetActive(false);
+        playerRB.transform.position = playerStarterPOS;
+        Debug.Log(playerRB.transform.position);
+    }
+
+    public void LoadCitadel()
+    {
+        SceneManager.LoadScene("Citadel");
     }
 
     public void SaveGame()

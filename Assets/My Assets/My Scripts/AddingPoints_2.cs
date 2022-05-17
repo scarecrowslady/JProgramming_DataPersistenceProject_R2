@@ -23,7 +23,7 @@ public class AddingPoints_2 : MonoBehaviour
         if(collision.CompareTag("res_debris") == true)
         {
             gameManager.GetComponent<GameController>().AddDebris(2);
-            gameManager.GetComponent<GameController>().AddRlshp(1);
+            gameManager.GetComponent<GameController>().AddRlshp(2);
             gameManager.GetComponent<GameController>().AddingScore(5);
 
             Debug.Log("Adding Debris: " + MainManager.Instance.InvDebrisCount);
@@ -32,12 +32,13 @@ public class AddingPoints_2 : MonoBehaviour
         if(collision.CompareTag("res_rocks") == true)
         {
             gameManager.GetComponent<GameController>().AddRocks(1);
-            gameManager.GetComponent<GameController>().AddRlshp(1);
+            gameManager.GetComponent<GameController>().MinusRlshp(2);
             gameManager.GetComponent<GameController>().AddingScore(5);
 
             Debug.Log("Adding Debris: " + MainManager.Instance.InvRockCount);
         }
 
+        //IRILL (negative count)
         if(collision.CompareTag("res_alien") == true)
         {
             gameManager.GetComponent<GameController>().AddBounty(3);
@@ -48,10 +49,10 @@ public class AddingPoints_2 : MonoBehaviour
             Debug.Log("Adding Plunder: " + MainManager.Instance.InvBountyCount);
         }
 
+        //XERON (positive count)
         if(collision.CompareTag("aggAlien") == true)
         {
             gameManager.GetComponent<GameController>().AddBounty(5);
-            gameManager.GetComponent<GameController>().MinusRlshp(1);
             gameManager.GetComponent<GameController>().AddMoney(2);
             gameManager.GetComponent<GameController>().AddingScore(20);
 

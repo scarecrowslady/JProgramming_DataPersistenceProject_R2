@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Game.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/HiScores.unity
-    guid: 885895d866ab78e44b097abdb13daf93
+    path: Assets/Scenes/Citadel.unity
+    guid: d084233abf71c054ea2e247ce88c1393
   m_configObjects: {}

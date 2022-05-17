@@ -14,6 +14,8 @@ public class MainMenuController : MonoBehaviour
     public bool colorSelected;
     public bool difficultySelected;
     public bool playerNameSelected;
+    public TMP_InputField inputPlayerName;
+    public string inputPlayerNameText;
 
     public string playerName;
     public Color playerColor;
@@ -25,6 +27,13 @@ public class MainMenuController : MonoBehaviour
     public TMP_Text lastPlayerScore;
     public string lastPlayerNameVar;
     public float lastPlayerScoreVar;
+
+    public TMP_Text bestPlayerName;
+    public TMP_Text bestPlayerScore;
+    public string bestPlayerNameVar;
+    public float bestPlayerScoreVar;
+
+    public int secondsLeft;
 
     private void Start()
     {
@@ -52,8 +61,16 @@ public class MainMenuController : MonoBehaviour
     public void SetPlayerName(string input)
     {
         MainManager.Instance.PlayerName = input;
+        inputPlayerNameText = inputPlayerName.text;
 
-        playerNameSelected = true;
+        if(!string.IsNullOrEmpty(inputPlayerNameText))
+        {
+            playerNameSelected = true;
+        }
+        else
+        {
+            playerNameSelected = false;
+        }
     }
 
     public void ClearHiScores()
@@ -68,6 +85,12 @@ public class MainMenuController : MonoBehaviour
 
         lastPlayerName.text = "Last Player: " + lastPlayerNameVar;       
         lastPlayerScore.text = "Highscore: " + lastPlayerScoreVar + "";
+
+        bestPlayerNameVar = MainManager.Instance.bestPlayerName;
+        bestPlayerScoreVar = MainManager.Instance.bestPlayerScore;
+
+        bestPlayerName.text = "Best Player: " + bestPlayerNameVar;
+        bestPlayerScore.text = "Highscore: " + bestPlayerScoreVar + "";
 
         MainManager.Instance.SaveInfo();
     }
@@ -85,6 +108,8 @@ public class MainMenuController : MonoBehaviour
             MainManager.Instance.InvRockCount = 0;
             MainManager.Instance.InvDebrisCount = 0;
             MainManager.Instance.InvBountyCount = 0;
+
+            MainManager.Instance.timeTaken = secondsLeft;
 
             SceneManager.LoadScene("Game");
         }

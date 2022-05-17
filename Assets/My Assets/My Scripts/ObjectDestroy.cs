@@ -10,6 +10,9 @@ public class ObjectDestroy : MonoBehaviour
     //bottom destruction
     public float bottomRangeLimit;
 
+    //level ended destruction
+    GameController gameController;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +30,14 @@ public class ObjectDestroy : MonoBehaviour
         if (transform.position.y < bottomRangeLimit)
         {
             Destroy(gameObject);
+        }
+
+        if (MainManager.Instance.isLevelEnded == true)
+        {
+            if (gameObject.CompareTag("bullet") || gameObject.CompareTag("res_rocks") || gameObject.CompareTag("res_debris") || gameObject.CompareTag("res_alien") || gameObject.CompareTag("aggAlien") || gameObject.CompareTag("allienBullet") || gameObject.CompareTag("playerKiller") == true)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 

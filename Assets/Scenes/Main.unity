@@ -3012,7 +3012,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &686689273
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3061,7 +3061,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: player
+  m_text: best player
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3363,7 +3363,7 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
-  m_CharacterLimit: 0
+  m_CharacterLimit: 7
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
@@ -3547,7 +3547,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &733180550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3568,7 +3568,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: score
+  m_text: best score
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3683,7 +3683,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &762573648
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4364,6 +4364,8 @@ MonoBehaviour:
   colorSelected: 0
   difficultySelected: 0
   playerNameSelected: 0
+  inputPlayerName: {fileID: 698678292}
+  inputPlayerNameText: 
   playerName: 
   playerColor: {r: 0, g: 0, b: 0, a: 0}
   playerHealth: 0
@@ -4372,6 +4374,11 @@ MonoBehaviour:
   lastPlayerScore: {fileID: 2065593938}
   lastPlayerNameVar: 
   lastPlayerScoreVar: 0
+  bestPlayerName: {fileID: 686689275}
+  bestPlayerScore: {fileID: 733180550}
+  bestPlayerNameVar: 
+  bestPlayerScoreVar: 0
+  secondsLeft: 10
 --- !u!4 &846596877
 Transform:
   m_ObjectHideFlags: 0
@@ -4508,6 +4515,12 @@ MonoBehaviour:
   InvBountyCount: 0
   lastPlayerName: 
   lastPlayerScore: 0
+  bestPlayerName: 
+  bestPlayerScore: 0
+  levelName: 
+  levelNumber: 0
+  isLevelEnded: 0
+  timeTaken: 0
 --- !u!4 &865988788
 Transform:
   m_ObjectHideFlags: 0
@@ -4871,7 +4884,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: player
+  m_text: last player
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7185,7 +7198,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1585216840
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9010,7 +9023,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: score
+  m_text: last score
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

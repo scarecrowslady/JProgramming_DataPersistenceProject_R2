@@ -37,22 +37,25 @@ public class PlayerController : MonoBehaviour
     {
         SetPlayerColor();
 
-        if (Input.GetKeyDown(KeyCode.Space) == true)
+        if(MainManager.Instance.isLevelEnded == false)
         {
-            Instantiate(bulletPrefab, gameObject.transform.position, bulletPrefab.transform.rotation);
-        }
+            if (Input.GetKeyDown(KeyCode.Space) == true)
+            {
+                Instantiate(bulletPrefab, gameObject.transform.position, bulletPrefab.transform.rotation);
+            }
 
-        if (transform.position.x < -xRange)
-        {
-            transform.position = new Vector3(-xRange, transform.position.y, transform.position.z);
-        }
-        if (transform.position.x > xRange)
-        {
-            transform.position = new Vector3(xRange, transform.position.y, transform.position.z);
-        }
+            if (transform.position.x < -xRange)
+            {
+                transform.position = new Vector3(-xRange, transform.position.y, transform.position.z);
+            }
+            if (transform.position.x > xRange)
+            {
+                transform.position = new Vector3(xRange, transform.position.y, transform.position.z);
+            }
 
-        horizontalInput = Input.GetAxis("Horizontal");
-        transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * playerMoveSpeed);
+            horizontalInput = Input.GetAxis("Horizontal");
+            transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * playerMoveSpeed);
+        }       
 
         Debug.Log("Player Health: " + MainManager.Instance.PlayerHealth + "");
     }
